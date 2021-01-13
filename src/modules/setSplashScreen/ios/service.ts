@@ -15,37 +15,37 @@ export const addIosSplashScreen = async (
   try {
     const iosSplashImageFolder = addIosImageSetContents('SplashImage', EImageSetType.IMAGE);
     await generateIosSplashImages(imageSource, iosSplashImageFolder);
-    generateStoryboardFile(backgroundColor, resizeMode);
-    setNewSplashScreenFileRefInInfoPlist();
+    // generateStoryboardFile(backgroundColor, resizeMode);
+    // setNewSplashScreenFileRefInInfoPlist();
   } catch (err) {
     console.log(err);
   }
 };
 
-const generateStoryboardFile = (backgroundColor: string, resizeMode: EResizeMode) => {
-  const { red, green, blue, alpha } = getNormalizedRGBAColors(backgroundColor);
-  replaceInFile(
-    join(__dirname, `../../../../templates/ios/SplashScreen.${resizeMode}.storyboard`),
-    `./ios/${config.iosStoryboardName}.storyboard`,
-    [
-      {
-        oldContent: /<color.*key="backgroundColor".*\/>/g,
-        newContent: `<color key="backgroundColor" red="${red}" green="${green}" blue="${blue}" alpha="${alpha}" colorSpace="custom" customColorSpace="sRGB"/>`,
-      },
-    ]
-  );
-};
+// const generateStoryboardFile = (backgroundColor: string, resizeMode: EResizeMode) => {
+//   const { red, green, blue, alpha } = getNormalizedRGBAColors(backgroundColor);
+//   replaceInFile(
+//     join(__dirname, `../../../../templates/ios/SplashScreen.${resizeMode}.storyboard`),
+//     `./ios/${config.iosStoryboardName}.storyboard`,
+//     [
+//       {
+//         oldContent: /<color.*key="backgroundColor".*\/>/g,
+//         newContent: `<color key="backgroundColor" red="${red}" green="${green}" blue="${blue}" alpha="${alpha}" colorSpace="custom" customColorSpace="sRGB"/>`,
+//       },
+//     ]
+//   );
+// };
 
-const setNewSplashScreenFileRefInInfoPlist = () => {
-  const infoPlistPath = `./ios/${getIosPackageName()}/Info.plist`;
-  const UILaunchStoryboardNamePattern = /(<key>UILaunchStoryboardName<\/key>[ \t\n]*<string>)[a-zA-Z]+(<\/string>)/g;
-  replaceInFile(infoPlistPath, infoPlistPath, [
-    {
-      oldContent: UILaunchStoryboardNamePattern,
-      newContent: `$1${config.iosStoryboardName}$2`,
-    },
-  ]);
-};
+// const setNewSplashScreenFileRefInInfoPlist = () => {
+//   const infoPlistPath = `./ios/${getIosPackageName()}/Info.plist`;
+//   const UILaunchStoryboardNamePattern = /(<key>UILaunchStoryboardName<\/key>[ \t\n]*<string>)[a-zA-Z]+(<\/string>)/g;
+//   replaceInFile(infoPlistPath, infoPlistPath, [
+//     {
+//       oldContent: UILaunchStoryboardNamePattern,
+//       newContent: `$1${config.iosStoryboardName}$2`,
+//     },
+//   ]);
+// };
 
 const generateIosSplashImages = (imageSource: string, iosSplashImageFolder: string) => {
   const { multipliers, size } = config.iosSplashImage;
